@@ -37,4 +37,5 @@ abstract class MongoService<T> implements IService<T> {
     return car;
   }
 }
+
 export default MongoService;
