@@ -1,4 +1,3 @@
-import { parse } from 'path';
 import { CarZodSchema } from '../interfaces/ICar';
 import { IModel } from '../interfaces/IModel';
 import { IService } from '../interfaces/IService';
@@ -32,7 +31,6 @@ abstract class MongoService<T> implements IService<T> {
     const parsed = CarZodSchema.safeParse(obj);
     if (!parsed.success) throw Error(ErrorTypes.InvalidMongoId);
     const update = await this._model.update(_id, obj);
-    console.log(update, 'aquiiiiiiiiiiiii');
     if (!update) throw Error(ErrorTypes.EntityNotFound);
   
     return update;
