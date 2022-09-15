@@ -1,3 +1,4 @@
+import { parse } from 'path';
 import { CarZodSchema } from '../interfaces/ICar';
 import { IModel } from '../interfaces/IModel';
 import { IService } from '../interfaces/IService';
@@ -28,14 +29,18 @@ abstract class MongoService<T> implements IService<T> {
   }
 
   public async update(_id:string, obj: T): Promise<T> {
+    const parsed = CarZodSchema.safeParse(obj);
+    if (!parsed.success) throw Error(ErrorTypes.InvalidMongoId);
     const update = await this._model.update(_id, obj);
-    if (!update) throw Error(ErrorTypes.InvalidMongoId);
+    console.log(update, 'aquiiiiiiiiiiiii');
+    if (!update) throw Error(ErrorTypes.EntityNotFound);
+  
     return update;
   }
 
   public async delete(_id:string): Promise<T> {
     const car = await this._model.delete(_id);
-    if (!car) throw Error(ErrorTypes.InvalidMongoId);
+    if (!car) throw Error(ErrorTypes.EntityNotFound);
     return car;
   }
 }
