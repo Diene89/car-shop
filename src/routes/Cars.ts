@@ -7,16 +7,16 @@ const model = new CarModel();
 const service = new CarService(model);
 const controller = new CarController(service);
 
-const route = Router();
+const routeCar = Router();
 
-route.post('/', (req, res) => controller.create(req, res));
+routeCar.post('/', (req, res) => controller.create(req, res));
 
-route.get('/', (req, res) => controller.read(req, res));
+routeCar.get('/', (req, res) => controller.read(req, res));
 
-route.get('/:id', (req, res) => controller.readOne(req, res));
+routeCar.get('/:id', (req, res) => controller.readOne(req, res));
 
-route.put('/:id', (req, res) => controller.update(req, res));
+routeCar.put('/:id', (req, res) => controller.update(req, res));
 
-route.delete('/:id', (req, res) => controller.delete(req, res));
+routeCar.delete('/:id', (req, res) => controller.delete(req, res));
 
-export default route;
+export default routeCar;

@@ -1,15 +1,16 @@
+import { CarZodSchema } from '../interfaces/ICar';
 import { IModel } from '../interfaces/IModel';
 import { IService } from '../interfaces/IService';
 
 abstract class MongoService<T> implements IService<T> {
-  protected _model:IModel<T>;
-  invalidError = 'Invalid MongoId';
-
-  constructor(model:IModel<T>) {
-    this._model = model;
+  constructor(protected _model:IModel<T>, protected _carSchema = CarZodSchema) {
   }
 
   public async create(obj:T):Promise<T> {
+    const parsed = this._carSchema.safeParse(obj);
+    if (!parsed.success) {
+      throw parsed.error;
+    }
     const created = await this._model.create(obj);
     return created;
   }
