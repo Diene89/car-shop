@@ -1,6 +1,7 @@
 import { CarZodSchema } from '../interfaces/ICar';
 import { IModel } from '../interfaces/IModel';
 import { IService } from '../interfaces/IService';
+import { ErrorTypes } from '../middlewares/errorCatalog';
 
 abstract class MongoService<T> implements IService<T> {
   constructor(protected _model:IModel<T>, protected _carSchema = CarZodSchema) {
@@ -22,19 +23,19 @@ abstract class MongoService<T> implements IService<T> {
 
   public async readOne(_id:string):Promise<T> {
     const car = await this._model.readOne(_id);
-    if (!car) throw Error();
+    if (!car) throw Error(ErrorTypes.EntityNotFound);
     return car;
   }
 
   public async update(_id:string, obj: T): Promise<T> {
     const update = await this._model.update(_id, obj);
-    if (!update) throw Error();
+    if (!update) throw Error(ErrorTypes.InvalidMongoId);
     return update;
   }
 
   public async delete(_id:string): Promise<T> {
     const car = await this._model.delete(_id);
-    if (!car) throw Error();
+    if (!car) throw Error(ErrorTypes.InvalidMongoId);
     return car;
   }
 }
