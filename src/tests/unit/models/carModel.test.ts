@@ -60,7 +60,6 @@ describe('Car Model', () => {
   
 
   describe('create', () => {
-
     it('', async () => {
       const created = await model.create(carMock);
       expect(created).to.be.deep.equal(carMockWithId)
@@ -68,7 +67,6 @@ describe('Car Model', () => {
   });
 
   describe('read', () => {
-
     it('', async () => {
       const list = await model.read();
       expect(list).to.be.deep.equal([carMockWithId])
@@ -76,7 +74,6 @@ describe('Car Model', () => {
   });
 
   describe('readOne', () => { 
-
     it('passaaaaaa', async () => {
       const carId = await model.readOne('6323641b3bd18401fb123456');
       expect(carId).to.be.deep.equal(carMockWithId);
@@ -93,7 +90,6 @@ describe('Car Model', () => {
   });
 
   describe('update', () => {
-
     it('', async () => {
       try {
         await model.update('invalidId', carMockChange);
@@ -109,7 +105,6 @@ describe('Car Model', () => {
   });
 
   describe('delete', () => {
-
     it('', async () => {
       try {
         await model.delete('invalidId');
