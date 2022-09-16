@@ -1,6 +1,6 @@
 import * as sinon from 'sinon';
 import chai from 'chai';
-import { isValidObjectId, Model } from 'mongoose';
+import { Model } from 'mongoose';
 import CarModel from '../../../models/Cars';
 import { ICar } from '../../../interfaces/ICar';
 import { ErrorTypes } from '../../../middlewares/errorCatalog';
@@ -46,15 +46,21 @@ const carMockChangeWithId: ICar & {_id: string} = {
 
 describe('Car Model', () => {
   const model = new CarModel();
+
+  before(async () => {
+    sinon.stub(Model, 'create').resolves(carMockWithId);
+    sinon.stub(Model, 'find').resolves([carMockWithId]);
+    sinon.stub(Model, 'findOne').resolves(carMockWithId);
+    sinon.stub(Model, 'findByIdAndUpdate').resolves(carMockChangeWithId);
+    sinon.stub(Model, 'findByIdAndDelete').resolves(carMockWithId);
+  })
+  after(()=>{
+    sinon.restore();
+  })
   
+
   describe('create', () => {
-    before(async () => {
-      sinon.stub(Model, 'create').resolves(carMockWithId);
-    })
-    after(()=>{
-      sinon.restore();
-    })
-    
+
     it('', async () => {
       const created = await model.create(carMock);
       expect(created).to.be.deep.equal(carMockWithId)
@@ -62,12 +68,6 @@ describe('Car Model', () => {
   });
 
   describe('read', () => {
-    before(async () => {
-      sinon.stub(Model, 'find').resolves([carMockWithId]);
-    })
-    after(()=>{
-      sinon.restore();
-    })
 
     it('', async () => {
       const list = await model.read();
@@ -75,13 +75,7 @@ describe('Car Model', () => {
     });
   });
 
-  describe.only('readOne', () => { 
-    before(async () => {
-      sinon.stub(Model, 'findOne').resolves(carMockWithId);
-    })
-    after(()=>{
-      sinon.restore();
-    })
+  describe('readOne', () => { 
 
     it('passaaaaaa', async () => {
       const carId = await model.readOne('6323641b3bd18401fb123456');
@@ -99,12 +93,6 @@ describe('Car Model', () => {
   });
 
   describe('update', () => {
-    before(async () => {
-      sinon.stub(Model, 'findByIdAndUpdate').resolves(carMockWithId);
-    })
-    after(()=>{
-      sinon.restore();
-    })
 
     it('', async () => {
       try {
@@ -121,12 +109,6 @@ describe('Car Model', () => {
   });
 
   describe('delete', () => {
-    before(async () => {
-      sinon.stub(Model, 'findByIdAndDelete').resolves(carMockWithId);
-    })
-    after(()=>{
-      sinon.restore();
-    })
 
     it('', async () => {
       try {
