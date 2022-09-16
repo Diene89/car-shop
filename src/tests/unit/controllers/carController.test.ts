@@ -6,7 +6,6 @@ import CarService from '../../../services/Cars';
 import CarModel from '../../../models/Cars';
 import { ICar } from '../../../interfaces/ICar';
 import { Request, Response } from 'express';
-import MongoController from '../../../controllers/MongoController';
 const { expect } = chai;
 
 const carMock: ICar = {
@@ -25,7 +24,7 @@ const carMockWithId: ICar & {_id: string} = {
   buyValue: 3500000,
   seatsQty: 2,
   doorsQty: 2,
-  _id: '6323641b3bd18401fb123456'
+  _id: '6323641b3bd18401fb821e47'
 }
 
 const carMockChange: ICar = {
@@ -44,7 +43,7 @@ const carMockChangeWithId: ICar & {_id: string} = {
   buyValue: 3500001,
   seatsQty: 2,
   doorsQty: 2,
-  _id: '6323641b3bd18401fb123456'
+  _id: '6323641b3bd18401fb821e47'
 }
 
 describe('Car Service', () => {
@@ -56,11 +55,12 @@ describe('Car Service', () => {
   
   before(async () => {
     sinon.stub(service, 'create').resolves(carMockWithId);
-    sinon.stub(Model, 'find').resolves([carMockWithId]);
-    sinon.stub(Model, 'findOne').resolves(carMockWithId);
-    sinon.stub(Model, 'findByIdAndUpdate').resolves(carMockWithId);
-    sinon.stub(Model, 'findByIdAndDelete').resolves(carMockWithId);
+    sinon.stub(service, 'read').resolves([carMockWithId]);
+    sinon.stub(service, 'readOne').resolves(carMockWithId);
+    sinon.stub(service, 'update').resolves(carMockChangeWithId);
+    sinon.stub(service, 'delete').resolves(carMockWithId);
     res.status = sinon.stub().returns(res);
+    res.end = sinon.stub().returns(res);
     res.json = sinon.stub().returns(res);
   });
 
@@ -111,8 +111,8 @@ describe('Car Service', () => {
         req.params = {id: 'a validação é feita no model'}
         await controller.delete(req,res);
         expect((res.status as sinon.SinonStub).calledWith(204)).to.be.true;
+        expect((res.end as sinon.SinonStub).calledWith()).to.be.true;
       });
-  
   });
 
 });

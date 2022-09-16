@@ -46,7 +46,7 @@ abstract class MongoController<T> {
     res: Response<T>,
   ) {
     await this._service.delete(req.params.id);
-    return res.sendStatus(204);
+    return res.status(204).end();
   }
 }
 

@@ -22,7 +22,7 @@ const carMockWithId: ICar & {_id: string} = {
   buyValue: 3500000,
   seatsQty: 2,
   doorsQty: 2,
-  _id: '6323641b3bd18401fb123456'
+  _id: '6323641b3bd18401fb821e47'
 }
 
 const carMockChange: ICar = {
@@ -41,25 +41,25 @@ const carMockChangeWithId: ICar & {_id: string} = {
   buyValue: 3500001,
   seatsQty: 2,
   doorsQty: 2,
-  _id: '6323641b3bd18401fb123456'
+  _id: '6323641b3bd18401fb821e47'
 }
 
 describe('Car Service', () => {
   const model = new CarModel();
   const service = new CarService(model);
   
-  describe('create', () => {
-    before(async () => {
-      sinon.stub(Model, 'create').resolves(carMockWithId);
-      sinon.stub(Model, 'find').resolves([carMockWithId]);
-      sinon.stub(Model, 'findOne').resolves(carMockWithId);
-      sinon.stub(Model, 'findByIdAndUpdate').resolves(carMockChangeWithId);
-      sinon.stub(Model, 'findByIdAndDelete').resolves(carMockWithId);
-    })
-    after(()=>{
-      sinon.restore();
-    })
-    
+  before(async () => {
+    sinon.stub(model, 'create').resolves(carMockWithId);
+    sinon.stub(model, 'read').resolves([carMockWithId]);
+    sinon.stub(model, 'readOne').resolves(carMockWithId);
+    sinon.stub(model, 'update').resolves(carMockChangeWithId);
+    sinon.stub(model, 'delete').resolves(carMockWithId);
+  })
+  after(()=>{
+    sinon.restore();
+  })
+
+  describe('create', () => { 
     it('', async () => {
       const created = await service.create(carMock);
       expect(created).to.be.deep.equal(carMockWithId)
@@ -75,7 +75,7 @@ describe('Car Service', () => {
 
   describe('readOne', () => { 
     it('passaaaaaa', async () => {
-      const carId = await service.readOne('6323641b3bd18401fb123456');
+      const carId = await service.readOne('6323641b3bd18401fb821e47');
       expect(carId).to.be.deep.equal(carMockWithId);
     });
 
@@ -83,14 +83,14 @@ describe('Car Service', () => {
 
   describe('update', () => {
      it('', async () => {
-      const change = await service.update('6323641b3bd18401fb123456', carMockChange);
+      const change = await service.update('6323641b3bd18401fb821e47', carMockChange);
       expect(change).to.be.deep.equal(carMockChangeWithId)
     });
   });
 
   describe('delete', () => {
     it('', async () => {
-      const carDelete = await service.delete('6323641b3bd18401fb123456');
+      const carDelete = await service.delete('6323641b3bd18401fb821e47');
       expect(carDelete).to.be.deep.equal(carMockWithId)
     });
   });
