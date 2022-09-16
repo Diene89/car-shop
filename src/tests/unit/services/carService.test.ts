@@ -1,12 +1,9 @@
 import * as sinon from 'sinon';
 import chai from 'chai';
 import { Model } from 'mongoose';
-import CarController from '../../../controllers/Cars';
 import CarService from '../../../services/Cars';
 import CarModel from '../../../models/Cars';
 import { ICar } from '../../../interfaces/ICar';
-import { Request, Response } from 'express';
-import MongoController from '../../../controllers/MongoController';
 const { expect } = chai;
 
 const carMock: ICar = {
@@ -50,48 +47,36 @@ const carMockChangeWithId: ICar & {_id: string} = {
 describe('Car Service', () => {
   const model = new CarModel();
   const service = new CarService(model);
-  const controller = new CarController(service);
-  const req = {} as Request;
-  const res = {} as Response;
   
-  before(async () => {
-    sinon.stub(service, 'create').resolves(carMockWithId);
-    sinon.stub(Model, 'find').resolves([carMockWithId]);
-    sinon.stub(Model, 'findOne').resolves(carMockWithId);
-    sinon.stub(Model, 'findByIdAndUpdate').resolves(carMockWithId);
-    sinon.stub(Model, 'findByIdAndDelete').resolves(carMockWithId);
-    res.status = sinon.stub().returns(res);
-    res.json = sinon.stub().returns(res);
-  });
-
-  after(()=>{
-    sinon.restore();
-  });
-
   describe('create', () => {
+    before(async () => {
+      sinon.stub(Model, 'create').resolves(carMockWithId);
+      sinon.stub(Model, 'find').resolves([carMockWithId]);
+      sinon.stub(Model, 'findOne').resolves(carMockWithId);
+      sinon.stub(Model, 'findByIdAndUpdate').resolves(carMockChangeWithId);
+      sinon.stub(Model, 'findByIdAndDelete').resolves(carMockWithId);
+    })
+    after(()=>{
+      sinon.restore();
+    })
     
     it('', async () => {
-      req.body = carMock;
-      await controller.create(req,res);
-      expect((res.status as sinon.SinonStub).calledWith(201)).to.be.true;
-      expect((res.json as sinon.SinonStub).calledWith(carMockWithId)).to.be.true;
+      const created = await service.create(carMock);
+      expect(created).to.be.deep.equal(carMockWithId)
     });
   });
 
   describe('read', () => {
     it('', async () => {
-      await controller.read(req,res);
-      expect((res.status as sinon.SinonStub).calledWith(200)).to.be.true;
-      expect((res.json as sinon.SinonStub).calledWith([carMockWithId])).to.be.true;
+      const list = await service.read();
+      expect(list).to.be.deep.equal([carMockWithId])
     });
   });
 
   describe('readOne', () => { 
     it('passaaaaaa', async () => {
-      req.params = {id: 'a validação é feita no model'}
-      await controller.readOne(req,res);
-      expect((res.status as sinon.SinonStub).calledWith(200)).to.be.true;
-      expect((res.json as sinon.SinonStub).calledWith(carMockWithId)).to.be.true;
+      const carId = await service.readOne('6323641b3bd18401fb123456');
+      expect(carId).to.be.deep.equal(carMockWithId);
     });
 
   });
