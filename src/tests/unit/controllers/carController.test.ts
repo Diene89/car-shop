@@ -98,16 +98,21 @@ describe('Car Service', () => {
 
   describe('update', () => {
      it('', async () => {
-      const change = await service.update('6323641b3bd18401fb123456', carMockChange);
-      expect(change).to.be.deep.equal(carMockChangeWithId)
+      req.params = {id: 'a validação é feita no model'};
+      req.body = carMockChange;
+      await controller.update(req,res);
+      expect((res.status as sinon.SinonStub).calledWith(200)).to.be.true;
+      expect((res.json as sinon.SinonStub).calledWith(carMockChangeWithId)).to.be.true;
     });
   });
 
   describe('delete', () => {
-    it('', async () => {
-      const carDelete = await service.delete('6323641b3bd18401fb123456');
-      expect(carDelete).to.be.deep.equal(carMockWithId)
-    });
+    it('passaaaaaa', async () => {
+        req.params = {id: 'a validação é feita no model'}
+        await controller.delete(req,res);
+        expect((res.status as sinon.SinonStub).calledWith(204)).to.be.true;
+      });
+  
   });
 
 });
